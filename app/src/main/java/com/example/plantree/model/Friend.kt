@@ -7,3 +7,4 @@ data class Friend(
     val isPending: Boolean,
     val isDelete: Boolean
 )
+

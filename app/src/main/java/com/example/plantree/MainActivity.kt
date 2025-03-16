@@ -7,7 +7,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -17,15 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.plantree.ui.theme.PlantreeTheme
-import com.example.plantree.network.testeDb
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.sp
+import com.example.plantree.Services.Interfaces.createTables
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,12 +51,12 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
         modifier = modifier.padding(16.dp), // Adiciona um padding geral
         horizontalAlignment = Alignment.CenterHorizontally // Centraliza os componentes horizontalmente
     ) {
-        // Botão que chama a função `testeDb`
+        // Botão que chama a função testeDb
         Button(
             onClick = {
-                // Chama a função `testeDb` e atualiza o estado com a resposta
-                testeDb { response ->
-                    apiResponse = response
+                // Chama a função testeDb e atualiza o estado com a resposta
+                createTables { response ->
+                    apiResponse = response.toString()
                 }
             }
         ) {
