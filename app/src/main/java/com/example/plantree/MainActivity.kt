@@ -22,7 +22,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.sp
-import com.example.plantree.Services.Interfaces.createTables
+import com.example.plantree.Services.teste
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,12 +52,12 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
         modifier = modifier.padding(16.dp), // Adiciona um padding geral
         horizontalAlignment = Alignment.CenterHorizontally // Centraliza os componentes horizontalmente
     ) {
-        // Botão que chama a função testeDb
+        // Botão que chama a função teste
         Button(
             onClick = {
-                // Chama a função testeDb e atualiza o estado com a resposta
-                createTables { response ->
-                    apiResponse = response.toString()
+                // Chama a função teste e atualiza o estado com a resposta
+                teste { response ->
+                    apiResponse = response
                 }
             }
         ) {
