@@ -22,70 +22,31 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.sp
-import com.example.plantree.Services.Interfaces.createTables
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import br.com.fiap.testeaplicao.screens.HomeScreen
+import br.com.fiap.testeaplicao.screens.TeladeRegistro
+import com.example.plantree.Services.teste
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
         setContent {
             PlantreeTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+
+                val navController = rememberNavController()
+
+                NavHost(
+                    navController = navController,
+                    startDestination = "inicial"
+                ){
+                    composable(route = "inicial") { HomeScreen(navController) }
+                    composable(route = "registro") { TeladeRegistro() }
                 }
+
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    // Estado para armazenar a resposta da API
-    var apiResponse by remember { mutableStateOf<String?>(null) }
-
-    // Usa Column para organizar os componentes verticalmente
-    Column(
-        modifier = modifier.padding(16.dp), // Adiciona um padding geral
-        horizontalAlignment = Alignment.CenterHorizontally // Centraliza os componentes horizontalmente
-    ) {
-        // Botão que chama a função testeDb
-        Button(
-            onClick = {
-                // Chama a função testeDb e atualiza o estado com a resposta
-                createTables { response ->
-                    apiResponse = response.toString()
-                }
-            }
-        ) {
-            Text("Chamar testeDb")
-        }
-
-        // Exibe a resposta da API abaixo do botão
-        if (apiResponse != null) {
-            Text(
-                text = "Resposta da API: $apiResponse",
-                modifier = Modifier.padding(top = 16.dp), // Adiciona um espaço acima do texto
-                color = Color.Black,
-                fontSize = 18.sp
-            )
-        } else {
-            Text(
-                text = "Nenhuma resposta ainda.",
-                modifier = Modifier.padding(top = 16.dp), // Adiciona um espaço acima do texto
-                color = Color.Gray,
-                fontSize = 18.sp
-            )
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PlantreeTheme {
-        Greeting("Android")
     }
 }
