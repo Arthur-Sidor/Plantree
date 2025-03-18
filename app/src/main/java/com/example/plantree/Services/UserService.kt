@@ -63,7 +63,7 @@ fun teste(callback: (String) -> Unit) {
     })
 }
 
-fun createUser(user: User, callback: (String) -> Unit) {
+fun createUser(user: User, callback: (Int) -> Unit) {
     val apiService = ApiClient.createService(IUserService::class.java)
     val call = apiService.create(user)
     call.enqueue(object : Callback<ResponseBody> {
@@ -79,22 +79,22 @@ fun createUser(user: User, callback: (String) -> Unit) {
                     val userId = jsonObject.getInt("userId")
 
                     // Retorna a mensagem de sucesso via callback
-                    callback("$message | ID do usuário: $userId")
+                    callback(userId)
                 } catch (e: Exception) {
-                    callback("Erro ao processar JSON: ${e.message}")
+                    callback(-1)
                 }
             } else {
-                callback("Erro na resposta: ${response.errorBody()?.string()}")
+                callback(-1)
             }
         }
 
         override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-            callback("Falha na requisição: ${t.message}")
+            callback(-1)
         }
     })
 }
 
-fun listQtddArvoresById(userId: Int, callback: (String) -> Unit) {
+fun listQtddArvoresById(userId: Int, callback: (Int) -> Unit) {
     val apiService = ApiClient.createService(IUserService::class.java)
     val call = apiService.listQtddArvoresById(userId)
     call.enqueue(object : Callback<ResponseBody> {
@@ -109,17 +109,17 @@ fun listQtddArvoresById(userId: Int, callback: (String) -> Unit) {
                     val nmrArvores = jsonObject.getInt("nmr_arvores")
 
                     // Retorna a quantidade de árvores via callback
-                    callback("Quantidade de árvores: $nmrArvores")
+                    callback(nmrArvores)
                 } catch (e: Exception) {
-                    callback("Erro ao processar JSON: ${e.message}")
+                    callback(-1)
                 }
             } else {
-                callback("Erro na resposta: ${response.errorBody()?.string()}")
+                callback(-1)
             }
         }
 
         override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-            callback("Falha na requisição: ${t.message}")
+            callback(-1)
         }
     })
 }
