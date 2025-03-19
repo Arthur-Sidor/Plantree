@@ -34,7 +34,7 @@ interface IUserService {
 
     // Atualiza os dados de um usuário
     @PATCH("User/Edit")
-    fun update(@Body user: User): Call<ResponseBody>
+    fun updateUser(@Body user: User): Call<ResponseBody>
 
     fun archiveJsonToUser(context: Context): Call <User?>
 }
@@ -164,7 +164,7 @@ fun getNameById(userId: Int, callback: (String) -> Unit) {
 
 fun updateUser(user: User, callback: (String) -> Unit) {
     val apiService = ApiClient.createService(IUserService::class.java)
-    val call = apiService.update(user)
+    val call = apiService.updateUser(user)
     call.enqueue(object : Callback<ResponseBody> {
         override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
             if (response.isSuccessful) {

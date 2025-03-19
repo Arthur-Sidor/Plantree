@@ -19,7 +19,7 @@ import com.example.plantree.R
 import com.example.plantree.Viewmodel.ContadorViewModel
 
 @Composable
-fun TreeCounterScreen(onFriendsClick: NavHostController) {
+fun TreeCounterScreen(navController: NavHostController) { // Renomeie o parâmetro para navController
 
     var treeCount by remember { mutableStateOf(0) }
     val viewModel: ContadorViewModel = viewModel()
@@ -47,7 +47,7 @@ fun TreeCounterScreen(onFriendsClick: NavHostController) {
             )
 
             Spacer(modifier = Modifier.height(20.dp))
-//3DA941FF
+
             Box(
                 modifier = Modifier
                     .width(380.dp)
@@ -58,7 +58,7 @@ fun TreeCounterScreen(onFriendsClick: NavHostController) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Button(
-                            onClick = { if (treeCount > 0) treeCount-- },
+                            onClick = { if (treeCount > 0) treeCount-- ; viewModel.subInNmrArvore() },
                             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3DA941))
                         ) {
                             Text(text = "-", fontSize = 24.sp, color = Color.White)
@@ -71,7 +71,7 @@ fun TreeCounterScreen(onFriendsClick: NavHostController) {
                         )
                         Spacer(modifier = Modifier.width(16.dp))
                         Button(
-                            onClick = { treeCount++ },
+                            onClick = { treeCount++; viewModel.addInNmrArvore() },
                             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3DA941))
                         ) {
                             Text(text = "+", fontSize = 24.sp, color = Color.White)
@@ -79,6 +79,7 @@ fun TreeCounterScreen(onFriendsClick: NavHostController) {
                     }
 
                     Spacer(modifier = Modifier.height(20.dp))
+
                     Text(
                         text = if (treeCount > 0) "Parabéns! Você plantou $treeCount árvores!" else "Vamos plantar árvores?",
                         color = Color.White,
@@ -86,9 +87,10 @@ fun TreeCounterScreen(onFriendsClick: NavHostController) {
                     )
 
                     Spacer(modifier = Modifier.height(30.dp))
+
                     Row {
                         Button(
-                            onClick = { /* TODO: Adicionar ação de configurações */ },
+                            onClick = { navController.navigate("configuracoes") }, // Navega para Configurações
                             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3DA941)),
                             shape = RoundedCornerShape(12.dp)
                         ) {
@@ -98,7 +100,7 @@ fun TreeCounterScreen(onFriendsClick: NavHostController) {
                         Spacer(modifier = Modifier.width(20.dp))
 
                         Button(
-                            onClick = {},
+                            onClick = { navController.navigate("friends") }, // Navega para Amigos
                             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3DA941)),
                             shape = RoundedCornerShape(12.dp)
                         ) {

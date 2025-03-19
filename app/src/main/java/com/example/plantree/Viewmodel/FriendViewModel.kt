@@ -36,7 +36,7 @@ class FriendViewModel : ViewModel() {
     // Função para buscar a lista de amigos
     fun getFriends(userId: Int) {
         getFriends(userId) { result ->
-            _getFriendsResult.postValue(result)
+            _getFriendsResult.postValue(result.toString())
         }
     }
 
