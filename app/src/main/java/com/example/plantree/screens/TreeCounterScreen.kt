@@ -9,15 +9,29 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.contadordasarborigena.TreeCounterScreen
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.example.plantree.R
+import com.example.plantree.Viewmodel.ContadorViewModel
 
 @Composable
-fun TreeCounterScreen(onFriendsClick: () -> Unit) {
+fun TreeCounterScreen(onFriendsClick: NavHostController) {
+
     var treeCount by remember { mutableStateOf(0) }
+    val viewModel: ContadorViewModel = viewModel()
+    val context = LocalContext.current // Obtém o contexto atual
+
+    // Dispara a ação quando a tela é carregada
+    LaunchedEffect(Unit) {
+        val nmrArvores = viewModel.getNmrArvores(context)
+        if (nmrArvores is Int) {
+            treeCount = nmrArvores // Atualiza o estado com o número de árvores
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -84,7 +98,7 @@ fun TreeCounterScreen(onFriendsClick: () -> Unit) {
                         Spacer(modifier = Modifier.width(20.dp))
 
                         Button(
-                            onClick = onFriendsClick,
+                            onClick = {},
                             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3DA941)),
                             shape = RoundedCornerShape(12.dp)
                         ) {

@@ -34,7 +34,7 @@ class UserViewModel : ViewModel() {
     // Função para criar um novo usuário
     fun createUser(user: User) {
         createUser(user) { result ->
-            _createUserResult.postValue(result)
+            _createUserResult.postValue(result.toString())
         }
     }
 
