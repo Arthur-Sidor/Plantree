@@ -1,63 +1,38 @@
-package com.example.plantree.Viewmodel
+package com.example.plantree.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.example.plantree.Services.*
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import com.example.plantree.model.AcceptFriendRequest
 import com.example.plantree.model.DeleteFriendRequest
 import com.example.plantree.model.Friend
+import com.example.plantree.model.User
+import com.example.plantree.Services.*
 
-class FriendViewModel : ViewModel() {
+class FriendViewModel(application: Application) : AndroidViewModel(application) {
 
-    // LiveData para armazenar o resultado das requisições
-    private val _createConnectionResult = MutableLiveData<String>()
-    val createConnectionResult: LiveData<String> get() = _createConnectionResult
-
-    private val _getFriendsResult = MutableLiveData<String>()
-    val getFriendsResult: LiveData<String> get() = _getFriendsResult
-
-    private val _getPendingRequestsResult = MutableLiveData<String>()
-    val getPendingRequestsResult: LiveData<String> get() = _getPendingRequestsResult
-
-    private val _deleteFriendResult = MutableLiveData<String>()
-    val deleteFriendResult: LiveData<String> get() = _deleteFriendResult
-
-    private val _acceptConnectionResult = MutableLiveData<String>()
-    val acceptConnectionResult: LiveData<String> get() = _acceptConnectionResult
-
-    // Função para criar uma conexão de amizade
-    fun createConnection(friend: Friend) {
-        createConnection(friend) { result ->
-            _createConnectionResult.postValue(result)
+    fun getFriends(userId: Int, callback: (List<User>) -> Unit) {
+        getFriends(userId) {
+                message -> callback(message)
         }
     }
 
-    // Função para buscar a lista de amigos
-    fun getFriends(userId: Int) {
-        getFriends(userId) { result ->
-            _getFriendsResult.postValue(result.toString())
+    fun getPendingRequests(userId: Int, callback: (String) -> Unit) {
+        getPendingRequests(userId) { pendingRequests ->
+            callback(pendingRequests)
         }
     }
 
-    // Função para buscar pedidos de amizade pendentes
-    fun getPendingRequests(userId: Int) {
-        getPendingRequests(userId) { result ->
-            _getPendingRequestsResult.postValue(result)
+    fun deleteFriend(request: DeleteFriendRequest, callback: (String) -> Unit) {
+        deleteFriend(request) { message ->
+            callback(message)
         }
     }
 
-    // Função para deletar uma conexão de amizade
-    fun deleteFriend(request: DeleteFriendRequest) {
-        deleteFriend(request) { result ->
-            _deleteFriendResult.postValue(result)
+    fun acceptConnection(request: AcceptFriendRequest, callback: (String) -> Unit) {
+        acceptConnection(request) { message ->
+            callback(message)
         }
     }
 
-    // Função para aceitar uma conexão de amizade
-    fun acceptConnection(request: AcceptFriendRequest) {
-        acceptConnection(request) { result ->
-            _acceptConnectionResult.postValue(result)
-        }
-    }
+    // Hydra Dominatus!
 }
