@@ -1,13 +1,19 @@
 package com.example.plantree.Services
 
+import android.content.Context
 import com.example.plantree.Services.Client.ApiClient
 import com.example.plantree.model.User
+import com.google.gson.Gson
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.http.*
+import java.io.File
+import java.io.FileInputStream
+import java.io.IOException
+import java.nio.charset.StandardCharsets
 
 interface IUserService {
 
@@ -28,7 +34,9 @@ interface IUserService {
 
     // Atualiza os dados de um usuário
     @PATCH("User/Edit")
-    fun update(@Body user: User): Call<ResponseBody>
+    fun updateUser(@Body user: User): Call<ResponseBody>
+
+    fun archiveJsonToUser(context: Context): Call <User?>
 }
 
 // Método para fazer a chamada à API
@@ -156,7 +164,7 @@ fun getNameById(userId: Int, callback: (String) -> Unit) {
 
 fun updateUser(user: User, callback: (String) -> Unit) {
     val apiService = ApiClient.createService(IUserService::class.java)
-    val call = apiService.update(user)
+    val call = apiService.updateUser(user)
     call.enqueue(object : Callback<ResponseBody> {
         override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
             if (response.isSuccessful) {
@@ -180,5 +188,34 @@ fun updateUser(user: User, callback: (String) -> Unit) {
     })
 }
 
+fun archiveJsonToUser(context: Context): User? {
+    // Define o nome do arquivo e o diretório
+    val fileName = "user.json"
+    val directory = File(context.getExternalFilesDir(null), "content")
+    val file = File(directory, fileName)
 
+    // Verifica se o arquivo existe
+    if (!file.exists()) {
+        return null
+    }
+
+    return try {
+        FileInputStream(file).use { inputStream ->
+            // Lê o conteúdo do arquivo
+            val size = inputStream.available()
+            val buffer = ByteArray(size)
+            inputStream.read(buffer)
+
+            // Converte o conteúdo para uma string
+            val jsonString = String(buffer, StandardCharsets.UTF_8)
+
+            // Usa o Gson para desserializar o JSON em um objeto User
+            val gson = Gson()
+            gson.fromJson(jsonString, User::class.java)
+        }
+    } catch (e: IOException) {
+        e.printStackTrace()
+        null
+    }
+}
 

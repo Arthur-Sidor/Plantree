@@ -18,18 +18,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            SettingsScreen()
+            // Para testar a tela de configurações diretamente
+            SettingsScreen(navController = rememberNavController())
         }
     }
 }
 
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(navController: NavHostController?) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -63,7 +66,10 @@ fun SettingsScreen() {
         LogoutButton()
 
         // Botão Voltar
-        BackButton()
+        BackButton(onClick = {
+            // Navega para a tela "contador" ao clicar no botão "Voltar"
+            navController?.navigate("contador")
+        })
     }
 }
 
@@ -126,9 +132,9 @@ fun LogoutButton() {
 }
 
 @Composable
-fun BackButton() {
+fun BackButton(onClick: () -> Unit) {
     Button(
-        onClick = { /* Ação de voltar aqui */ },
+        onClick = onClick, // Ação ao clicar no botão
         modifier = Modifier
             .fillMaxWidth() // Ocupa toda a largura da tela
             .padding(top = 550.dp),  // Espaço acima do botão
@@ -147,5 +153,6 @@ fun BackButton() {
 @Preview(showBackground = true)
 @Composable
 fun PreviewSettingsScreen() {
-    SettingsScreen()
+    // Pré-visualização sem NavController
+    SettingsScreen(navController = null)
 }

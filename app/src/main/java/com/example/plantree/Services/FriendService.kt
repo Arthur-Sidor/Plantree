@@ -4,6 +4,7 @@ import com.example.plantree.Services.Client.ApiClient
 import com.example.plantree.model.AcceptFriendRequest
 import com.example.plantree.model.DeleteFriendRequest
 import com.example.plantree.model.Friend
+import com.example.plantree.model.User
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import retrofit2.Call
@@ -57,32 +58,47 @@ fun createConnection(friend: Friend, callback: (String) -> Unit) {
     })
 }
 
-fun getFriends(userId: Int, callback: (String) -> Unit) {
+fun getFriends(userId: Int, callback: (List<User>) -> Unit) {
     val apiService = ApiClient.createService(IFriendService::class.java)
     val call = apiService.getFriends(userId)
     call.enqueue(object : Callback<ResponseBody> {
         override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
             if (response.isSuccessful) {
                 try {
-                    val jsonString = response.body()?.string() ?: "Resposta vazia"
+                    val jsonString = response.body()?.string() ?: throw Exception("Resposta vazia")
                     val jsonObject = JSONObject(jsonString)
                     val friendsArray = jsonObject.getJSONArray("friends")
-                    val friendsList = mutableListOf<String>()
+
+                    // Cria uma lista de objetos Friend
+                    val friendsList = mutableListOf<User>()
                     for (i in 0 until friendsArray.length()) {
                         val friend = friendsArray.getJSONObject(i)
-                        friendsList.add("Nome: ${friend.getString("Nome")}, Árvores: ${friend.getInt("Nmr_Arvores")}")
+                        val key = friend.getInt("Key")
+                        val nome = friend.getString("Nome")
+                        val nmrArvores = friend.getInt("Nmr_Arvores")
+
+                        // Adiciona o objeto Friend à lista
+                        friendsList.add(User(key, nome, nmrArvores))
                     }
-                    callback("Amigos: ${friendsList.joinToString(", ")}")
+
+                    // Retorna a lista de amigos via callback
+                    callback(friendsList)
                 } catch (e: Exception) {
-                    callback("Erro ao processar JSON: ${e.message}")
+                    // Em caso de erro, retorna uma lista vazia
+                    callback(emptyList())
+                    println("Erro ao processar JSON: ${e.message}")
                 }
             } else {
-                callback("Erro na resposta: ${response.errorBody()?.string()}")
+                // Em caso de resposta não bem-sucedida, retorna uma lista vazia
+                callback(emptyList())
+                println("Erro na resposta: ${response.errorBody()?.string()}")
             }
         }
 
         override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-            callback("Falha na requisição: ${t.message}")
+            // Em caso de falha na requisição, retorna uma lista vazia
+            callback(emptyList())
+            println("Falha na requisição: ${t.message}")
         }
     })
 }

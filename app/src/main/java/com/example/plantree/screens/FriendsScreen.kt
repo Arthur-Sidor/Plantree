@@ -13,10 +13,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
-fun FriendsScreen(onBack: () -> Unit) {
+fun FriendsScreen(onBack: NavHostController) {
     var selectedTab by remember { mutableStateOf(0) }
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
     val systemUiController = rememberSystemUiController()
@@ -75,7 +76,8 @@ fun FriendsScreen(onBack: () -> Unit) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = onBack,
+            onClick = {        // Navega para a tela "contador"
+                onBack.navigate("contador")},
             colors = ButtonDefaults.buttonColors(containerColor = buttonColor),
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier.fillMaxWidth().padding(16.dp)
