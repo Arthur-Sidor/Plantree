@@ -30,6 +30,9 @@ fun HomeScreen(navController: NavController?) {
                 // Redireciona para a tela de registro apenas se o user for null
                 navController?.navigate("registro")
             }
+            else{
+                navController?.navigate("contador")
+            }
         }
 
         // Aguarda 3 segundos antes de prosseguir (opcional)
